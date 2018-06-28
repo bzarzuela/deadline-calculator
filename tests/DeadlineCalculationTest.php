@@ -54,4 +54,20 @@ class DeadlineCalculationTest extends TestCase
 
         $this->assertEquals('2018-07-04 12:20:00', $calculator->deadline());
     }
+    
+    /** @test */
+    function deadlines_can_span_multiple_weekends_and_holidays()
+    {
+        $calculator = new DeadlineCalculator();
+
+        $calculator->startFrom('2018-12-17 00:00:00')
+            ->noWeekends()
+            ->addHoliday('2018-12-24')
+            ->addHoliday('2018-12-25')
+            ->addHoliday('2018-12-31')
+            ->addHoliday('2019-01-01')
+            ->tatInDays(14);
+
+        $this->assertEquals('2019-01-10 00:00:00', $calculator->deadline());
+    }
 }

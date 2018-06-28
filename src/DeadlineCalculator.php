@@ -48,9 +48,16 @@ class DeadlineCalculator
         }
 
         foreach ($this->holidays as $holiday) {
+
             $holiday_timestamp = strtotime($holiday);
+
             if (($holiday_timestamp >= $startFrom) and ($holiday_timestamp <= $deadline)) {
-                $deadline += 86400;
+
+                if ($this->noWeekends === false) {
+                    $deadline = Carbon::createFromTimestamp($deadline)->addDay()->timestamp;
+                } else {
+                    $deadline = Carbon::createFromTimestamp($deadline)->addWeekday()->timestamp;
+                }
             }
         }
 
