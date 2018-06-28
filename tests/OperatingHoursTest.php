@@ -54,8 +54,8 @@ class OperatingHoursTest extends TestCase
 
         $calculator->startFrom('2018-06-29 16:00:00')
             ->operatingHours('09:00:00', '17:00:00')
-            ->saturday(Carbon::parse('09:00:00'), Carbon::parse('13:00:00'))
-            ->sunday(Carbon::parse('23:59:59'), Carbon::parse('23:59:59'))
+            ->saturday('09:00:00', '13:00:00')
+            ->noSunday()
             ->tatInHours(8);
 
         $this->assertEquals('2018-07-02 12:00:00', $calculator->deadline());

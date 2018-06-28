@@ -172,6 +172,20 @@ class DeadlineCalculator
         return $this;
     }
 
+    public function noSaturday()
+    {
+        $this->saturday('00:00:00', '00:00:00');
+
+        return $this;
+    }
+
+    public function noSunday()
+    {
+        $this->sunday('00:00:00', '00:00:00');
+
+        return $this;
+    }
+
     protected function shouldBypassWeekend(Carbon $deadline)
     {
         return $this->noWeekends and $deadline->isWeekend();

@@ -29,6 +29,33 @@ $calculator->tatInDays(3);
 echo $calculator->deadline(); // 2018-07-01 12:20:00 
 ```
 
+It supports bypassing weekends in the calculation.
+
+``` php
+$calculator->noWeekends();
+```
+
+TAT can also be set in hours
+
+``` php
+$calculator->tatInHours(24);
+```
+
+Operating Hours is supported for cases when TAT is measured in hours
+
+``` php
+$calculator->tatInHours(24)
+    ->operatingHours('09:00:00', '17:00:00'); // 9am to 5pm working hours
+```
+
+You can also set or override operating hours on a per-day basis
+``` php
+$calculator->tatInHours(24)
+    ->operatingHours('09:00:00', '17:00:00') // 9am to 5pm working hours
+    ->saturday('09:00:00', '12:00:00') // Half day on Saturday
+    ->noSunday(); // No work on Sundays
+```
+
 ### Testing
 
 ``` bash
