@@ -2,13 +2,17 @@
 
 namespace Bzarzuela\DeadlineCalculator;
 
+use Carbon\Carbon;
 use Illuminate\Support\Collection;
 
 class DeadlineCalculator
 {
-    protected $startFrom = null;
-    protected $tat = null;
+    /** @var Carbon */
+    protected $startFrom;
+
+    protected $tatInDays = null;
     protected $holidays;
+    protected $noWeekends = false;
 
     /**
      * DeadlineCalculator constructor.
@@ -21,25 +25,31 @@ class DeadlineCalculator
 
     public function startFrom($timestamp)
     {
-        $this->startFrom = strtotime($timestamp);
+        $this->startFrom = Carbon::parse($timestamp);
 
         return $this;
     }
 
     public function tatInDays($days)
     {
-        $this->tat = $days * 86400;
+        $this->tatInDays = $days;
 
         return $this;
     }
 
     public function deadline()
     {
-        $deadline = $this->startFrom + $this->tat;
+        $startFrom = $this->startFrom->timestamp;
+
+        if ($this->noWeekends === false) {
+            $deadline = $this->startFrom->addDays($this->tatInDays)->timestamp;
+        } else {
+            $deadline = $this->startFrom->addWeekdays($this->tatInDays)->timestamp;
+        }
 
         foreach ($this->holidays as $holiday) {
             $holiday_timestamp = strtotime($holiday);
-            if (($holiday_timestamp >= $this->startFrom) and ($holiday_timestamp <= $deadline)) {
+            if (($holiday_timestamp >= $startFrom) and ($holiday_timestamp <= $deadline)) {
                 $deadline += 86400;
             }
         }
@@ -50,6 +60,15 @@ class DeadlineCalculator
     public function addHoliday($holiday)
     {
         $this->holidays->push($holiday);
+
+        return $this;
+    }
+
+    public function noWeekends($value = true)
+    {
+        $this->noWeekends = $value;
+
+        return $this;
     }
 
 
