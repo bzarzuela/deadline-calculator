@@ -14,7 +14,6 @@ class DeadlineCalculator
     protected $startFrom;
 
     protected $noWeekends = false;
-    protected $tatInDays = null;
     protected $tatInHours = null;
 
     public function __construct()
@@ -31,7 +30,7 @@ class DeadlineCalculator
 
     public function tatInDays($days)
     {
-        $this->tatInDays = $days;
+        $this->tatInHours = $days * 24;
 
         return $this;
     }
@@ -47,23 +46,15 @@ class DeadlineCalculator
     {
         $deadline = $this->startFrom;
 
-        if ($this->tatInDays) {
-            for ($i = 0; $i < $this->tatInDays; $i++) {
-                $deadline = $this->addDay($deadline);
+        for ($i = 0; $i < $this->tatInHours; $i++) {
+            $deadline->addHour();
 
-                while ($this->isHoliday($deadline)) {
-                    $deadline = $this->addDay($deadline);
-                }
+            while ($this->noWeekends and $deadline->isWeekend()) {
+                $deadline->addHour();
             }
-        }
 
-        if ($this->tatInHours) {
-            for ($i = 0; $i < $this->tatInHours; $i++) {
-                $deadline = $this->addHour($deadline);
-
-                while ($this->isHoliday($deadline)) {
-                    $deadline = $this->addHour($deadline);
-                }
+            while ($this->isHoliday($deadline)) {
+                $deadline->addHour();
             }
         }
 
@@ -96,17 +87,6 @@ class DeadlineCalculator
         }
 
         return $date->addDay();
-    }
-
-    protected function addHour(Carbon $date)
-    {
-        $date->addHour();
-
-        if ($date->isWeekend()) {
-            $date->addWeekday();
-        }
-
-        return $date;
     }
 
 
