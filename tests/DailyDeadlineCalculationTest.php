@@ -5,7 +5,7 @@ namespace Bzarzuela\DeadlineCalculator\Tests;
 use Bzarzuela\DeadlineCalculator\DeadlineCalculator;
 use PHPUnit\Framework\TestCase;
 
-class DeadlineCalculationTest extends TestCase
+class DailyDeadlineCalculationTest extends TestCase
 {
     /** @test */
     function deadlines_can_be_computed_by_days()

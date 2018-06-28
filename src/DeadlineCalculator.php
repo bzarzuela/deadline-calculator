@@ -7,21 +7,20 @@ use Illuminate\Support\Collection;
 
 class DeadlineCalculator
 {
+    /** @var Collection */
+    protected $holidays;
+
     /** @var Carbon */
     protected $startFrom;
 
-    protected $tatInDays = null;
-    protected $holidays;
     protected $noWeekends = false;
+    protected $tatInDays = null;
+    protected $tatInHours = null;
 
-    /**
-     * DeadlineCalculator constructor.
-     */
     public function __construct()
     {
         $this->holidays = new Collection();
     }
-
 
     public function startFrom($timestamp)
     {
@@ -33,6 +32,13 @@ class DeadlineCalculator
     public function tatInDays($days)
     {
         $this->tatInDays = $days;
+
+        return $this;
+    }
+
+    public function tatInHours($hours)
+    {
+        $this->tatInHours = $hours;
 
         return $this;
     }
@@ -59,6 +65,19 @@ class DeadlineCalculator
                     $deadline = Carbon::createFromTimestamp($deadline)->addWeekday()->timestamp;
                 }
             }
+        }
+
+        if ($this->tatInHours !== null) {
+            $deadline = Carbon::createFromTimestamp($deadline)->addHours($this->tatInHours);
+
+            if ($this->noWeekends === true) {
+                echo $deadline, "\n";
+                while ($deadline->isWeekend()) {
+                    $deadline->addDay();
+                }
+            }
+
+            $deadline = $deadline->timestamp;
         }
 
         return date('Y-m-d H:i:s', $deadline);
