@@ -58,16 +58,11 @@ class DeadlineCalculator
         }
 
         if ($this->tatInHours) {
-            $deadline->addHours($this->tatInHours);
+            for ($i = 0; $i < $this->tatInHours; $i++) {
+                $deadline = $this->addHour($deadline);
 
-            if ($this->noWeekends === true) {
-
-                while ($deadline->isWeekend()) {
-                    $deadline->addDay();
-
-                    if ($this->isHoliday($deadline)) {
-                        $deadline->addDay();
-                    }
+                while ($this->isHoliday($deadline)) {
+                    $deadline = $this->addHour($deadline);
                 }
             }
         }
@@ -101,6 +96,17 @@ class DeadlineCalculator
         }
 
         return $date->addDay();
+    }
+
+    protected function addHour(Carbon $date)
+    {
+        $date->addHour();
+
+        if ($date->isWeekend()) {
+            $date->addWeekday();
+        }
+
+        return $date;
     }
 
 
