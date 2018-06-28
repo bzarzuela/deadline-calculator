@@ -13,7 +13,6 @@ class DeadlineCalculator
     /** @var Carbon */
     protected $startFrom;
 
-    protected $noWeekends = false;
     protected $tatInHours = null;
 
     protected $days;
@@ -54,7 +53,6 @@ class DeadlineCalculator
             $deadline->addHour();
 
             while (
-                $this->shouldBypassWeekend($deadline) or
                 $this->isHoliday($deadline) or
                 $this->isBeyondOperatingHours($deadline)
             ) {
@@ -72,9 +70,10 @@ class DeadlineCalculator
         return $this;
     }
 
-    public function noWeekends($value = true)
+    public function noWeekends()
     {
-        $this->noWeekends = $value;
+        $this->noSaturday()
+            ->noSunday();
 
         return $this;
     }
@@ -184,11 +183,6 @@ class DeadlineCalculator
         $this->sunday('00:00:00', '00:00:00');
 
         return $this;
-    }
-
-    protected function shouldBypassWeekend(Carbon $deadline)
-    {
-        return $this->noWeekends and $deadline->isWeekend();
     }
 
     protected function setDay($start, $end, $day)
