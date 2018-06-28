@@ -29,4 +29,17 @@ class HourlyDeadlineCalculationTest extends TestCase
 
         $this->assertEquals('2018-07-02 14:00:00', $calc->deadline());
     }
+
+    /** @test */
+    function deadlines_take_holidays_in_consideration()
+    {
+        $calc = new DeadlineCalculator();
+
+        $calc->startFrom('2018-06-29 14:00:00')
+            ->noWeekends()
+            ->addHoliday('2018-07-02')
+            ->tatInHours(24);
+
+        $this->assertEquals('2018-07-03 14:00:00', $calc->deadline());
+    }
 }

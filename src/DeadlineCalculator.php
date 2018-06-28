@@ -71,9 +71,13 @@ class DeadlineCalculator
             $deadline = Carbon::createFromTimestamp($deadline)->addHours($this->tatInHours);
 
             if ($this->noWeekends === true) {
-                echo $deadline, "\n";
+                
                 while ($deadline->isWeekend()) {
                     $deadline->addDay();
+
+                    if ($this->isHoliday($deadline)) {
+                        $deadline->addDay();
+                    }
                 }
             }
 
@@ -85,7 +89,7 @@ class DeadlineCalculator
 
     public function addHoliday($holiday)
     {
-        $this->holidays->push($holiday);
+        $this->holidays[$holiday] = $holiday;
 
         return $this;
     }
@@ -95,6 +99,11 @@ class DeadlineCalculator
         $this->noWeekends = $value;
 
         return $this;
+    }
+
+    protected function isHoliday(Carbon $day)
+    {
+        return $this->holidays->has($day->format('Y-m-d'));
     }
 
 
