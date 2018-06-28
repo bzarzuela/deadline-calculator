@@ -45,33 +45,23 @@ class DeadlineCalculator
 
     public function deadline()
     {
-        $startFrom = $this->startFrom->timestamp;
+        $deadline = $this->startFrom;
 
-        if ($this->noWeekends === false) {
-            $deadline = $this->startFrom->addDays($this->tatInDays)->timestamp;
-        } else {
-            $deadline = $this->startFrom->addWeekdays($this->tatInDays)->timestamp;
-        }
+        if ($this->tatInDays) {
+            for ($i = 0; $i < $this->tatInDays; $i++) {
+                $deadline = $this->addDay($deadline);
 
-        foreach ($this->holidays as $holiday) {
-
-            $holiday_timestamp = strtotime($holiday);
-
-            if (($holiday_timestamp >= $startFrom) and ($holiday_timestamp <= $deadline)) {
-
-                if ($this->noWeekends === false) {
-                    $deadline = Carbon::createFromTimestamp($deadline)->addDay()->timestamp;
-                } else {
-                    $deadline = Carbon::createFromTimestamp($deadline)->addWeekday()->timestamp;
+                while ($this->isHoliday($deadline)) {
+                    $deadline = $this->addDay($deadline);
                 }
             }
         }
 
-        if ($this->tatInHours !== null) {
-            $deadline = Carbon::createFromTimestamp($deadline)->addHours($this->tatInHours);
+        if ($this->tatInHours) {
+            $deadline->addHours($this->tatInHours);
 
             if ($this->noWeekends === true) {
-                
+
                 while ($deadline->isWeekend()) {
                     $deadline->addDay();
 
@@ -80,11 +70,9 @@ class DeadlineCalculator
                     }
                 }
             }
-
-            $deadline = $deadline->timestamp;
         }
 
-        return date('Y-m-d H:i:s', $deadline);
+        return $deadline->format('Y-m-d H:i:s');
     }
 
     public function addHoliday($holiday)
@@ -104,6 +92,15 @@ class DeadlineCalculator
     protected function isHoliday(Carbon $day)
     {
         return $this->holidays->has($day->format('Y-m-d'));
+    }
+
+    protected function addDay(Carbon $date)
+    {
+        if ($this->noWeekends) {
+            return $date->addWeekday();
+        }
+
+        return $date->addDay();
     }
 
 
