@@ -1,22 +1,22 @@
 {
-    "name": "spatie/:package_name",
-    "description": ":package_description",
+    "name": "bzarzuela/deadline-calculator",
+    "description": "Simplifies computation of TAT with overrides of operating hours and holidays",
     "keywords": [
-        "spatie",
-        ":package_name"
+        "bzarzuela",
+        "deadline-calculator"
     ],
-    "homepage": "https://github.com/spatie/:package_name",
+    "homepage": "https://github.com/bzarzuela/deadline-calculator",
     "license": "MIT",
     "authors": [
         {
-            "name": ":author_name",
-            "email": ":author_email",
-            "homepage": "https://spatie.be",
+            "name": "Bryan Zarzuela",
+            "email": "bryan@teleserv.ph",
             "role": "Developer"
         }
     ],
     "require": {
-        "php": "^7.1"
+        "php": "^7.1",
+        "nesbot/carbon": "^1.31"
     },
     "require-dev": {
         "larapack/dd": "^1.0",
@@ -24,12 +24,12 @@
     },
     "autoload": {
         "psr-4": {
-            "Spatie\\Skeleton\\": "src"
+            "Bzarzuela\\DeadlineCalculator\\": "src"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Spatie\\Skeleton\\Tests\\": "tests"
+            "Bzarzuela\\DeadlineCalculator\\Tests\\": "tests"
         }
     },
     "scripts": {
@@ -43,10 +43,10 @@
     "extra": {
         "laravel": {
             "providers": [
-                "Spatie\\Skeleton\\SkeletonServiceProvider"
+                "Bzarzuela\\DeadlineCalculator\\DeadlineCalculatorServiceProvider"
             ],
             "aliases": {
-                "Skeleton": "Spatie\\Skeleton\\SkeletonFacade"
+                "DeadlineCalculator": "Bzarzuela\\DeadlineCalculator\\DeadlineCalculatorFacade"
             }
         }
     }

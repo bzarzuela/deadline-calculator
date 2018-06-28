@@ -1,27 +1,32 @@
-# Very short description of the package
+# Deadline Calculator with support for operating hours and holidays
 
-[![Latest Version on Packagist](https://img.shields.io/packagist/v/spatie/:package_name.svg?style=flat-square)](https://packagist.org/packages/spatie/:package_name)
-[![Build Status](https://img.shields.io/travis/spatie/:package_name/master.svg?style=flat-square)](https://travis-ci.org/spatie/:package_name)
-[![Quality Score](https://img.shields.io/scrutinizer/g/spatie/:package_name.svg?style=flat-square)](https://scrutinizer-ci.com/g/spatie/:package_name)
-[![Total Downloads](https://img.shields.io/packagist/dt/spatie/:package_name.svg?style=flat-square)](https://packagist.org/packages/spatie/:package_name)
+[![Latest Version on Packagist](https://img.shields.io/packagist/v/bzarzuela/deadline-calculator.svg?style=flat-square)](https://packagist.org/packages/bzarzuela/deadline-calculator)
+[![Build Status](https://img.shields.io/travis/bzarzuela/deadline-calculator/master.svg?style=flat-square)](https://travis-ci.org/bzarzuela/deadline-calculator)
+[![Quality Score](https://img.shields.io/scrutinizer/g/bzarzuela/deadline-calculator.svg?style=flat-square)](https://scrutinizer-ci.com/g/bzarzuela/deadline-calculator)
+[![Total Downloads](https://img.shields.io/packagist/dt/bzarzuela/deadline-calculator.svg?style=flat-square)](https://packagist.org/packages/bzarzuela/deadline-calculator)
 
-**Note:** Replace ```:author_name``` ```:author_username``` ```:author_email``` ```:package_name``` ```:package_description``` with their correct values in [README.md](README.md), [CHANGELOG.md](CHANGELOG.md), [CONTRIBUTING.md](CONTRIBUTING.md), [LICENSE.md](LICENSE.md) and [composer.json](composer.json) files, then delete this line.
 
-This is where your description should go. Try and limit it to a paragraph or two, and maybe throw in a mention of what PSRs you support to avoid any confusion with users and contributors.
+A very common requirement in our projects is the ability for the CRM to compute for the deadline of a Ticket.
+There are a lot of factors that have to be considered when computing deadlines such as weekends, operating hours that vary, etc
+
+By default, the package assumes a 24/7 operation. The recommended usage is to pre-configure the class and bind it 
+to the Service Provider of your application. 
 
 ## Installation
 
 You can install the package via composer:
 
 ```bash
-composer require spatie/:package_name
+composer require bzarzuela/deadline-calculator
 ```
 
 ## Usage
 
 ``` php
-$skeleton = new Spatie\Skeleton();
-echo $skeleton->echoPhrase('Hello, Spatie!');
+$calculator = new Bzarzuela\DeadlineCalculator();
+$calculator->startFrom('2018-06-28 12:20:00);
+$calculator->tatInDays(3);
+echo $calculator->deadline(); // 2018-07-01 12:20:00 
 ```
 
 ### Testing
@@ -40,27 +45,12 @@ Please see [CONTRIBUTING](CONTRIBUTING.md) for details.
 
 ### Security
 
-If you discover any security related issues, please email freek@spatie.be instead of using the issue tracker.
-
-## Postcardware
-
-You're free to use this package, but if it makes it to your production environment we highly appreciate you sending us a postcard from your hometown, mentioning which of our package(s) you are using.
-
-Our address is: Spatie, Samberstraat 69D, 2060 Antwerp, Belgium.
-
-We publish all received postcards [on our company website](https://spatie.be/en/opensource/postcards).
+If you discover any security related issues, please email bryan@teleserv.ph instead of using the issue tracker.
 
 ## Credits
 
-- [:author_name](https://github.com/:author_username)
+- [Bryan Zarzuela](https://github.com/bzarzuela)
 - [All Contributors](../../contributors)
-
-## Support us
-
-Spatie is a webdesign agency based in Antwerp, Belgium. You'll find an overview of all our open source projects [on our website](https://spatie.be/opensource).
-
-Does your business depend on our contributions? Reach out and support us on [Patreon](https://www.patreon.com/spatie). 
-All pledges will be dedicated to allocating workforce on maintenance and new awesome stuff.
 
 ## License
 
