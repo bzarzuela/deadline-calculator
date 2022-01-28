@@ -3,7 +3,6 @@
 namespace Bzarzuela\DeadlineCalculator\Tests;
 
 use Bzarzuela\DeadlineCalculator\DeadlineCalculator;
-use Carbon\Carbon;
 use PHPUnit\Framework\TestCase;
 
 class OperatingHoursTest extends TestCase
@@ -21,7 +20,19 @@ class OperatingHoursTest extends TestCase
     }
 
     /** @test */
-    function deadlines_on_a_friday_afternoon_will_be_started_on_monday()
+    function deadlines_at_night_will_be_started_on_operating_hours()
+    {
+        $calculator = new DeadlineCalculator();
+
+        $calculator->startFrom('2018-06-28 06:00:00')
+            ->operatingHours('09:00:00', '18:00:00')
+            ->tatInHours(1);
+
+        $this->assertEquals('2018-06-28 10:00:00', $calculator->deadline());
+    }
+
+    /** @test */
+    function deadlines_at_night_will_start_at_operating_hours()
     {
         $calculator = new DeadlineCalculator();
 

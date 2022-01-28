@@ -49,15 +49,14 @@ class DeadlineCalculator
     {
         $deadline = $this->startFrom;
 
+        // If the calculation occurs before the start of the operating hours or on holidays,
+        // we bring the time to the operating hours.
+        $this->toOperatingHours($deadline);
+
         for ($i = 0; $i < $this->tatInHours; $i++) {
             $deadline->addHour();
 
-            while (
-                $this->isHoliday($deadline) or
-                $this->isBeyondOperatingHours($deadline)
-            ) {
-                $deadline->addHour();
-            }
+            $this->toOperatingHours($deadline);
         }
 
         return $deadline->format('Y-m-d H:i:s');
@@ -94,6 +93,24 @@ class DeadlineCalculator
         return $this;
     }
 
+    /**
+     * Reschedules a deadline to the operating hours.
+     *
+     * @param Carbon $deadline
+     * @return Carbon
+     */
+    protected function toOperatingHours($deadline)
+    {
+        while (
+            $this->isHoliday($deadline) or
+            $this->isBeyondOperatingHours($deadline)
+        ) {
+            $deadline->addHour();
+        }
+
+        return $deadline;
+    }
+
     protected function isHoliday(Carbon $day)
     {
         return $this->holidays->has($day->format('Y-m-d'));
@@ -115,11 +132,7 @@ class DeadlineCalculator
 
         $deadline = $deadline->format('H:i:s');
 
-        if (($deadline >= $end) or ($deadline < $start)) {
-            return true;
-        }
-
-        return false;
+        return ($deadline >= $end) or ($deadline < $start);
     }
 
     public function sunday($start, $end)
@@ -200,5 +213,4 @@ class DeadlineCalculator
             'end' => $end,
         ];
     }
-
 }
